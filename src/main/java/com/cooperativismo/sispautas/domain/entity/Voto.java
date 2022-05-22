@@ -1,0 +1,43 @@
+package com.cooperativismo.sispautas.domain.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import com.cooperativismo.sispautas.domain.enums.Decisao;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ *Entidade responsável por manter votos nas sessões
+ */
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table
+public class Voto {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(nullable = false)
+	private Long id;
+	
+	@Setter
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Decisao decisao;
+	
+	@Setter
+	@ManyToOne
+	private Associado autor;
+	
+}
