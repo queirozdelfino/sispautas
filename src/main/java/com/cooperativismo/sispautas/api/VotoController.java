@@ -12,7 +12,7 @@ import com.cooperativismo.sispautas.domain.entity.Voto;
 import com.cooperativismo.sispautas.domain.service.VotoService;
 
 @RestController
-@RequestMapping("/votar")
+@RequestMapping("/voto")
 public class VotoController implements VotoDocs{
 	
 	private final VotoService votoService;
@@ -28,5 +28,5 @@ public class VotoController implements VotoDocs{
 	public ResponseEntity<Voto> postVotarPauta(VotoDTO votoDTO) {
 		return ResponseEntity.status(HttpStatus.OK).body(votoService.createVoto(votoDTO));
 	}
-
+	
 }

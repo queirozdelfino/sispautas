@@ -11,5 +11,9 @@ public interface PautaService {
 	Pauta createSessao(SessaoPautaDTO sessaoPautaDTO);
 
 	Pauta findPautaById(Long id);
+	
+	Pauta findDecisaoPauta(Long id);
+
+	Pauta createPauta(Pauta pauta);
 
 }

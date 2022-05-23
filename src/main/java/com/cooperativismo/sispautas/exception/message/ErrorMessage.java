@@ -13,6 +13,8 @@ public enum ErrorMessage {
 	CPF_NAO_ENCONTRADO ("O CPF informado não foi encontrado na base de dados."),
 	PAUTA_NAO_ENCONTRADA("A Pauta informada não foi encontrada na base de dados."),
 	PAUTA_JA_INICIADA("A Pauta informada já se encontra iniciada. Por favor, inclua uma nova pauta."),
+	PAUTA_NAO_INICIADA("Não foi possível obter resultado, pois a sessão da pauta não foi iniciada."),
+	PAUTA_ABERTA("Não foi possível obter resultado, pois a sessão da pauta aida está aberta."),
 	VOTO_EXISTENTE("O associado informado já votou na pauta escolhida."),
 	PAUTA_VENCIDA("O período de votação dessa pauta já se encerrou."),
 	CADASTO_DUPLICADO("Cadastro duplicado."),
