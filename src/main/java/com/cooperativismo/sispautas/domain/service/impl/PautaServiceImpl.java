@@ -59,6 +59,22 @@ public class PautaServiceImpl implements PautaService {
 		return response;
 	}
 	
+	@Override
+	public Pauta createPauta(Pauta pauta) {
+		Pauta response;
+		
+		//Persistência
+		try {
+			BasicLog.info("Acesso ao banco", PautaService.class);
+			response = repository.save(pauta);
+		} catch (Exception e) {
+			BasicLog.error(e.getMessage(), PautaService.class);
+			throw new DomainInternalServerErrorException(ErrorMessage.ERRO_INTERNO.getMessage(), e);
+		}
+		
+		return response;
+	}
+	
 	
 	@Override
 	public Pauta createSessao(SessaoPautaDTO sessaoPautaDTO) {
@@ -101,6 +117,23 @@ public class PautaServiceImpl implements PautaService {
 		}
 		
 		return null;
+	}
+	
+
+	@Override
+	public Pauta findDecisaoPauta(Long id) {
+		Pauta pauta = findPautaByIdVerify(id);
+		
+		//Validações
+		verifyPautaFechada(pauta);
+		
+		//Persistência, caso precise.
+		if(pauta.getDecisaoFinal() == null) {
+			pauta = pautaComponent.calcDecisao(pauta);
+			pauta = createPauta(pauta);
+		}
+		
+		return pauta;
 	}
 	
 	
@@ -156,7 +189,17 @@ public class PautaServiceImpl implements PautaService {
 			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_JA_INICIADA.getMessage());
 		}
 	}
-
-
+	
+	private void verifyPautaFechada(Pauta pauta) {
+		if(pauta.getDataLimite() == null) {  //Verifica se a pauta já foi iniciada.
+			BasicLog.error(ErrorMessage.PAUTA_NAO_INICIADA.getMessage(), PautaService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_NAO_INICIADA.getMessage());
+		}
+		
+		if(pauta.getDataLimite().isAfter(LocalDateTime.now())) { //Verifica se a pauta foi fechada para gerar o resultado.
+			BasicLog.error(ErrorMessage.PAUTA_ABERTA.getMessage(), PautaService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_ABERTA.getMessage());
+		}
+	}
 
 }

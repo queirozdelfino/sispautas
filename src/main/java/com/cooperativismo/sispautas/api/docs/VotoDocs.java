@@ -46,4 +46,6 @@ public interface VotoDocs {
 
 	    })
 	ResponseEntity<Voto> postVotarPauta(@RequestBody VotoDTO votoDTO);
+
+
 }
