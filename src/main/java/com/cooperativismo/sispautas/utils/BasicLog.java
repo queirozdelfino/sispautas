@@ -15,7 +15,7 @@ public class BasicLog {
 		
 		logger = Logger.getLogger(clazz.getName());
 		
-		message = String.format("%s Class: %s",
+		message = String.format("%s, Class: %s",
 								info,
 								clazz.getName());
 		
@@ -28,7 +28,7 @@ public class BasicLog {
 		
 		logger = Logger.getLogger(clazz.getName());
 		
-		message = String.format("%s Class: %s",
+		message = String.format("%s, Class: %s",
 				error,
 				clazz.getName());
 
@@ -40,7 +40,7 @@ public class BasicLog {
 		
 		logger = Logger.getLogger(clazz.getName());
 		
-		message = String.format("%s httpStatus: %s Class: %s",
+		message = String.format("%s, httpStatus: %s, Class: %s",
 				info,
 				httpStatus,
 				clazz.getName());
@@ -52,7 +52,7 @@ public class BasicLog {
 		
 		logger = Logger.getLogger(clazz.getName());
 		
-		message = String.format("%s httpStatus: %s Class: %s",
+		message = String.format("%s, httpStatus: %s, Class: %s",
 				error,
 				httpStatus,
 				clazz.getName());
