@@ -70,7 +70,7 @@ public class AssociadoServiceImpl implements AssociadoService{
 	private Associado mapAssociado(AssociadoDTO dto){
 		Associado associado = new Associado();
 		associado.setCpf(dto.getCpf());
-		associado.setNome(dto.getCpf());
+		associado.setNome(dto.getNome());
 		return associado;
 	}
 
