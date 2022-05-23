@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cooperativismo.sispautas.api.docs.AssociadoDocs;
+import com.cooperativismo.sispautas.domain.dto.AssociadoDTO;
 import com.cooperativismo.sispautas.domain.entity.Associado;
 import com.cooperativismo.sispautas.domain.service.AssociadoService;
 
@@ -25,8 +26,8 @@ public class AssociadoController implements AssociadoDocs{
 
 	@Override
 	@PostMapping
-	public ResponseEntity<Associado> postAssociado(@RequestBody Associado associado) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(associadoService.createAssociado(associado));
+	public ResponseEntity<Associado> postAssociado(@RequestBody AssociadoDTO associadoDto) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(associadoService.createAssociado(associadoDto));
 	}
 
 }
