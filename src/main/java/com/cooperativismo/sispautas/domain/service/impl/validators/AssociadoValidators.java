@@ -6,12 +6,12 @@ import com.cooperativismo.sispautas.exception.message.ErrorMessage;
 import com.cooperativismo.sispautas.utils.BasicLog;
 import com.cooperativismo.sispautas.utils.CPFUtil;
 import com.cooperativismo.sispautas.utils.StringUtil;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AssociadoValidators {
+
 	
 	public static void validators(Associado associado) {
 		BasicLog.info("Começando validações", AssociadoValidators.class);
@@ -27,10 +27,11 @@ public class AssociadoValidators {
 	}
 	
 	private static void validaNome(String nome) {
-		if(StringUtil.vazio(nome)) { //Se o nome for inválido estorará um BadRequest para o cliente.
+		if(StringUtil.vazio(nome)) {   //Se o nome for inválido estorará um BadRequest para o cliente.
 			BasicLog.error(ErrorMessage.DADO_VAZIO.erroCampoVazio("Nome"), AssociadoValidators.class);
 			throw new DomainBadRequestException(ErrorMessage.DADO_VAZIO.erroCampoVazio("Nome"));
 		}
 	}
+	
 
 }

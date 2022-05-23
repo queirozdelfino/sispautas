@@ -6,8 +6,9 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorMessage {
 	
 	ERRO_INTERNO("Erro interno. Tente novamente mais tarde."),
-	CPF_INVALIDO("CPF inválido"),
-	DADO_VAZIO(" não pode ser vazio");
+	CPF_INVALIDO("CPF inválido."),
+	CADASTO_DUPLICADO("Cadastro duplicado."),
+	DADO_VAZIO(" não pode ser vazio.");
 
 	private final String message;
 
