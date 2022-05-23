@@ -6,11 +6,16 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorMessage {
 	
 	ERRO_INTERNO("Erro interno. Tente novamente mais tarde."),
-	DADOS_INVALIDOS("Dados inválidos");
+	CPF_INVALIDO("CPF inválido"),
+	DADO_VAZIO(" não pode ser vazio");
 
 	private final String message;
 
 	public String getMessage() {
 		return this.message;
+	}
+	
+	public String erroCampoVazio(String campo) {
+		return campo + this.message;
 	}
 }

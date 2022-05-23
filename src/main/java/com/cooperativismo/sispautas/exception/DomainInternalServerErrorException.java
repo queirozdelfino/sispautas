@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 
 import com.cooperativismo.sispautas.exception.dto.ResponseError;
 
+/**
+ * Usada somente para erros inesperados do sistema.
+ */
 public class DomainInternalServerErrorException extends AbstractDomainServiceException {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	public static final String TITLE = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
 	public static final String CODE = HttpStatus.INTERNAL_SERVER_ERROR.toString();
