@@ -30,15 +30,13 @@ public class AssociadoServiceImpl implements AssociadoService{
 
 	@Override
 	public Associado createAssociado(AssociadoDTO associadoDto) {
-		Associado response = null;
+		Associado response;
 		
+		//Validações
 		AssociadoValidators.validators(associadoDto);
-		
-		if(findAssociadoByCpf(associadoDto.getCpf()) != null) {  //Verifica se o cadastro não está duplicado por CPF.
-			BasicLog.error(ErrorMessage.CADASTO_DUPLICADO.getMessage(), AssociadoService.class);
-			throw new DomainUnprocessableEntityException(ErrorMessage.CADASTO_DUPLICADO.getMessage());
-		}
+		verifyCpfDuplicado(associadoDto);
 	
+		//Persistência
 		try {
 			BasicLog.info("Acesso ao banco", AssociadoService.class);
 			response = repository.save(mapAssociado(associadoDto));
@@ -46,6 +44,7 @@ public class AssociadoServiceImpl implements AssociadoService{
 			BasicLog.error(e.getMessage(), AssociadoService.class);
 			throw new DomainInternalServerErrorException(ErrorMessage.ERRO_INTERNO.getMessage(), e);
 		}
+		
 		return response;
 	}
 	
@@ -63,15 +62,25 @@ public class AssociadoServiceImpl implements AssociadoService{
 		if(response.isPresent()) {
 			return response.get();
 		}
+		
 		return null;
 	}
 	
 	
 	private Associado mapAssociado(AssociadoDTO dto){
 		Associado associado = new Associado();
+		
 		associado.setCpf(dto.getCpf());
 		associado.setNome(dto.getNome());
+		
 		return associado;
+	}
+	
+	private void verifyCpfDuplicado(AssociadoDTO associadoDto) {
+		if(findAssociadoByCpf(associadoDto.getCpf()) != null) {  //Verifica se o cadastro não está duplicado por CPF.
+			BasicLog.error(ErrorMessage.CADASTO_DUPLICADO.getMessage(), AssociadoService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.CADASTO_DUPLICADO.getMessage());
+		}
 	}
 
 }

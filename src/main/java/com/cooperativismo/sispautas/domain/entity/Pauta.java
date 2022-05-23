@@ -1,8 +1,10 @@
 package com.cooperativismo.sispautas.domain.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,8 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import com.cooperativismo.sispautas.domain.enums.Decisao;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +29,8 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table
+@Entity(name = "Pauta")
+@Table(name = "pauta")
 public class Pauta {
 	
 	@Id
@@ -52,9 +54,13 @@ public class Pauta {
 	@Column
 	private LocalDateTime dataLimite;
 	
-	@Setter
-	@OneToMany
-	private List<Voto> votos;
+	@JsonIgnore
+	@OneToMany(
+	        mappedBy = "pauta",
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+	    )
+	private List<Voto> votos = new ArrayList<>();
 	
 	@Setter
 	@Enumerated(EnumType.STRING)

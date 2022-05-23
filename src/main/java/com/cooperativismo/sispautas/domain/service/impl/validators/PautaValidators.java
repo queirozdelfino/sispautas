@@ -1,7 +1,6 @@
 package com.cooperativismo.sispautas.domain.service.impl.validators;
 
 import java.time.LocalDateTime;
-
 import com.cooperativismo.sispautas.domain.dto.PautaDTO;
 import com.cooperativismo.sispautas.domain.dto.SessaoPautaDTO;
 import com.cooperativismo.sispautas.utils.BasicLog;
@@ -23,6 +22,13 @@ public class PautaValidators {
 		BasicLog.info("Começando validações", PautaValidators.class);
 		if(sessaoPautaDTO.getDataLimite() != null) {		
 			DateUtil.validaDataIntervalo(LocalDateTime.now(), sessaoPautaDTO.getDataLimite(), PautaValidators.class);
+		}
+	}
+	
+	public static void validatorsPautaVencida(LocalDateTime data) {
+		BasicLog.info("Começando validações", PautaValidators.class);
+		if(data != null) {		
+			DateUtil.validaDataVencida(LocalDateTime.now(), data, PautaValidators.class);
 		}
 	}
 

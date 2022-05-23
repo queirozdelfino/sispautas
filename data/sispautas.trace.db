@@ -31,3 +31,6 @@ insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
 2022-05-22 22:06:36 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'0000000000000000000000000000000' (31)"; SQL statement:
 insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-23 10:41:01 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM PAUTA_VOTOS PAUTA_VOTOS [*]VOTO"; SQL statement:
+SELECT * FROM PAUTA_VOTOS PAUTA_VOTOS VOTO [42000-212]

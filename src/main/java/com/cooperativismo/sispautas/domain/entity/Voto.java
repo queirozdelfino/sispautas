@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,8 +23,8 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table
+@Entity(name = "Voto")
+@Table(name = "voto")
 public class Voto {
 	
 	@Id
@@ -39,5 +40,9 @@ public class Voto {
 	@Setter
 	@ManyToOne
 	private Associado autor;
+	
+	@Setter
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Pauta pauta;
 	
 }
