@@ -8,7 +8,8 @@ public enum ErrorMessage {
 	ERRO_INTERNO("Erro interno. Tente novamente mais tarde."),
 	CPF_INVALIDO("CPF inválido."),
 	CADASTO_DUPLICADO("Cadastro duplicado."),
-	DADO_VAZIO(" não pode ser vazio.");
+	DADO_VAZIO(" não pode ser vazio."),
+	DADO_MAIOR(" não pode ser maior que ");
 
 	private final String message;
 
@@ -18,5 +19,8 @@ public enum ErrorMessage {
 	
 	public String erroCampoVazio(String campo) {
 		return campo + this.message;
+	}
+	public String erroCampoMaior(String campo, int tamanho) {
+		return campo + this.message + tamanho;
 	}
 }

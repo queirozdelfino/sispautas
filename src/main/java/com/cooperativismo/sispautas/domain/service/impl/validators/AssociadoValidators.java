@@ -31,6 +31,10 @@ public class AssociadoValidators {
 			BasicLog.error(ErrorMessage.DADO_VAZIO.erroCampoVazio("Nome"), AssociadoValidators.class);
 			throw new DomainBadRequestException(ErrorMessage.DADO_VAZIO.erroCampoVazio("Nome"));
 		}
+		if(nome.length() > 100) {
+			BasicLog.error(ErrorMessage.DADO_MAIOR.erroCampoMaior("Nome", 100), AssociadoValidators.class);
+			throw new DomainBadRequestException(ErrorMessage.DADO_MAIOR.erroCampoMaior("Nome", 100));
+		}
 	}
 	
 
