@@ -5,12 +5,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.cooperativismo.sispautas.domain.dto.PautaDTO;
 import com.cooperativismo.sispautas.domain.dto.SessaoPautaDTO;
 import com.cooperativismo.sispautas.domain.entity.Associado;
 import com.cooperativismo.sispautas.domain.entity.Pauta;
 import com.cooperativismo.sispautas.domain.repository.PautaRepository;
-import com.cooperativismo.sispautas.domain.service.AssociadoService;
 import com.cooperativismo.sispautas.domain.service.PautaService;
 import com.cooperativismo.sispautas.domain.service.impl.component.PautaComponent;
 import com.cooperativismo.sispautas.domain.service.impl.validators.PautaValidators;
@@ -40,19 +40,14 @@ public class PautaServiceImpl implements PautaService {
 
 	@Override
 	public Pauta createPauta(PautaDTO pautaDto) {
-		
 		Pauta response;
 		Associado autor;
 		
+		//Validações
 		PautaValidators.validators(pautaDto);
+		autor = findAssociadoByCpfVerify(pautaDto.getCpfAutor());
 		
-		autor = pautaComponent.findAssociadoByCpf(pautaDto.getCpfAutor());
-		
-		if(autor == null) {  //Verifica se o cpf foi encontrado
-			BasicLog.error(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage(), PautaService.class);
-			throw new DomainNotFoundException(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage());
-		}
-		
+		//Persistência
 		try {
 			BasicLog.info("Acesso ao banco", PautaService.class);
 			response = repository.save(mapPauta(pautaDto, autor));
@@ -67,32 +62,16 @@ public class PautaServiceImpl implements PautaService {
 	
 	@Override
 	public Pauta createSessao(SessaoPautaDTO sessaoPautaDTO) {
-		
 		Pauta response;
 		Associado autor;
 		
+		//Validações
 		PautaValidators.validatorsSessao(sessaoPautaDTO);
+		response = findPautaByIdVerify(sessaoPautaDTO.getIdPauta());
+		verifyPautaAberta(response);
+		autor = findAssociadoByCpfVerify(sessaoPautaDTO.getCpfAutor());
 		
-		response = findPautaById(sessaoPautaDTO.getIdPauta());
-		
-		if(response == null) {  //Verifica se a pauta existe.
-			BasicLog.error(ErrorMessage.PAUTA_NAO_ENCONTRADA.getMessage(), PautaService.class);
-			throw new DomainNotFoundException(ErrorMessage.PAUTA_NAO_ENCONTRADA.getMessage());
-		}
-		
-		if(response.getDataLimite() != null) {  //Verifica se a pauta já foi iniciada.
-			BasicLog.error(ErrorMessage.PAUTA_JA_INICIADA.getMessage(), PautaService.class);
-			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_JA_INICIADA.getMessage());
-		}
-		
-		autor = pautaComponent.findAssociadoByCpf(sessaoPautaDTO.getCpfAutor());
-		
-		if(autor == null) {  //Verifica se o cpf foi encontrado
-			BasicLog.error(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage(), PautaService.class);
-			throw new DomainNotFoundException(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage());
-		}
-		
-		
+		//Persistência
 		try {
 			BasicLog.info("Acesso ao banco", PautaService.class);
 			response = repository.save(mapPautaBySessao(sessaoPautaDTO, autor, response));
@@ -100,6 +79,7 @@ public class PautaServiceImpl implements PautaService {
 			BasicLog.error(e.getMessage(), PautaService.class);
 			throw new DomainInternalServerErrorException(ErrorMessage.ERRO_INTERNO.getMessage(), e);
 		}
+		
 		return response;
 	}
 
@@ -109,18 +89,21 @@ public class PautaServiceImpl implements PautaService {
 		Optional<Pauta> response;
 		
 		try {
-			BasicLog.info("Acesso ao banco", AssociadoService.class);
+			BasicLog.info("Acesso ao banco", PautaService.class);
 			response = repository.findById(id);
 		} catch (Exception e) {
-			BasicLog.error(e.getMessage(), AssociadoService.class);
+			BasicLog.error(e.getMessage(), PautaService.class);
 			throw new DomainInternalServerErrorException(ErrorMessage.ERRO_INTERNO.getMessage(), e);
 		}
+		
 		if(response.isPresent()) {
 			return response.get();
 		}
+		
 		return null;
 	}
-
+	
+	
 
 	private Pauta mapPauta(PautaDTO dto, Associado autor) {
 		Pauta pauta = new Pauta();
@@ -140,7 +123,38 @@ public class PautaServiceImpl implements PautaService {
 		} else {			
 			pauta.setDataLimite(dto.getDataLimite());
 		}
+		
 		return pauta;
+	}
+	
+	private Associado findAssociadoByCpfVerify(String cpf) {
+		Associado autor = pautaComponent.findAssociadoByCpf(cpf);
+		
+		if(autor == null) {  //Verifica se o cpf foi encontrado
+			BasicLog.error(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage(), PautaService.class);
+			throw new DomainNotFoundException(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage());
+		}
+		
+		return autor;
+	}
+
+
+	private Pauta findPautaByIdVerify(Long id) {
+		Pauta pauta = findPautaById(id);
+		
+		if(pauta == null) {  //Verifica se a pauta existe.
+			BasicLog.error(ErrorMessage.PAUTA_NAO_ENCONTRADA.getMessage(), PautaService.class);
+			throw new DomainNotFoundException(ErrorMessage.PAUTA_NAO_ENCONTRADA.getMessage());
+		}
+		
+		return pauta;
+	}
+	
+	private void verifyPautaAberta(Pauta pauta) {
+		if(pauta.getDataLimite() != null) {  //Verifica se a pauta já foi iniciada.
+			BasicLog.error(ErrorMessage.PAUTA_JA_INICIADA.getMessage(), PautaService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_JA_INICIADA.getMessage());
+		}
 	}
 
 

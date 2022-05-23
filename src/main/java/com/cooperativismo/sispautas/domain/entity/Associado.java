@@ -23,8 +23,8 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table
+@Entity(name = "Associado")
+@Table(name = "associado")
 public class Associado {
 	
 	@JsonProperty(access = Access.READ_ONLY)
