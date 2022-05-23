@@ -1,0 +1,33 @@
+2022-05-22 20:36:33 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'00000000000000000000000000000000000' (35)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-22 21:08:20 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'00000000000000000000000000000000000' (35)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-22 21:24:43 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'00000000000000000000000000000000000' (35)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-22 21:25:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'00000000000000000000000000000000000' (35)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-22 21:25:53 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'00000000000000000000000000000000000' (35)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-22 21:26:59 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'00000000000000000000000000000000000' (35)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-22 21:29:48 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'00000000000000000000000000000000000' (35)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-22 21:34:06 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'0000000000000000000000000000000' (31)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-22 21:36:17 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'0000000000000000000000000000000' (31)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-22 21:37:20 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'0000000000000000000000000000000' (31)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
+2022-05-22 22:06:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CPF CHARACTER VARYING(11)": "'0000000000000000000000000000000' (31)"; SQL statement:
+insert into associado (id, cpf, nome) values (default, ?, ?) [22001-212]
