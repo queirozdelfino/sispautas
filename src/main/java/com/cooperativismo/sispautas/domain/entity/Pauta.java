@@ -41,11 +41,15 @@ public class Pauta {
 	private String titulo;
 	
 	@Setter
+	@Column(length = 300)
+	private String detalhes;
+	
+	@Setter
 	@ManyToOne
 	private Associado autor;
 	
 	@Setter
-	@Column(nullable = false)
+	@Column
 	private LocalDateTime dataLimite;
 	
 	@Setter
