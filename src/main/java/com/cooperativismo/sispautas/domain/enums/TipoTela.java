@@ -1,8 +1,8 @@
 package com.cooperativismo.sispautas.domain.enums;
 
-public enum Decisao {
+public enum TipoTela {
 	
-	SIM,
-	NAO
+	FORMUALRIO,
+	SELECAO
 
 }

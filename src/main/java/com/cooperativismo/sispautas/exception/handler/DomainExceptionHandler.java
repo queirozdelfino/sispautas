@@ -18,7 +18,6 @@ public class DomainExceptionHandler {
 
 	/**
 	 * Resolve as exceções TRATADAS dentro do sistema, derivadas de {@link AbstractDomainServiceException}
-	 * São capturadas pelo class {@link LogBusinessExceptionAspect}.
 	 * 
 	 * @param ex AbstractDomainServiceException
 	 * @return

@@ -3,11 +3,9 @@ package com.cooperativismo.sispautas.api.docs;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import com.cooperativismo.sispautas.domain.dto.AssociadoDTO;
-import com.cooperativismo.sispautas.domain.entity.Associado;
+import com.cooperativismo.sispautas.domain.dto.VotoDTO;
+import com.cooperativismo.sispautas.domain.entity.Voto;
 import com.cooperativismo.sispautas.exception.dto.ResponseError;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,14 +13,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "associado", description = "Responsável por manter Associados da cooperativa")
-public interface AssociadoDocs {
+@Tag(name = "voto", description = "Responsável por manter voto das pautas")
+public interface VotoDocs {
 	
-	@Operation(summary = "Inclui novo associado", tags = "associado")
+	
+	@Operation(summary = "Faz a votação do associado", tags = "voto")
 	@ApiResponses(value = {
-		    @ApiResponse(responseCode = "201",
-		            description = "Associado incluído com Sucesso",
-		            content = @Content(schema = @Schema(implementation = Associado.class))
+		    @ApiResponse(responseCode = "200",
+		            description = "Pauta votada com sucesso",
+		            content = @Content(schema = @Schema(implementation = Voto.class))
 		    ),
 		    @ApiResponse(responseCode = "400",
 		            content = @Content(
@@ -46,5 +45,7 @@ public interface AssociadoDocs {
 		    ),
 
 	    })
-	ResponseEntity<Associado> postAssociado(@RequestBody AssociadoDTO associadoDto);
+	ResponseEntity<Voto> postVotarPauta(@RequestBody VotoDTO votoDTO);
+
+
 }

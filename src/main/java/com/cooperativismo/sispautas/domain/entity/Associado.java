@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +23,8 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table
+@Entity(name = "Associado")
+@Table(name = "associado")
 public class Associado {
 	
 	@JsonProperty(access = Access.READ_ONLY)
@@ -34,10 +35,12 @@ public class Associado {
 	
 	@Setter
 	@Column(nullable = false, length = 11)
+	@Schema(example = "99087586086")
 	private String cpf;
 	
 	@Setter
 	@Column(nullable = false, length = 100)
+	@Schema(example = "João dos Reis")
 	private String nome;
 	
 }

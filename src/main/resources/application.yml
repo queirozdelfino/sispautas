@@ -15,7 +15,6 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate.ddl-auto: update
  
-#SPRINGDOC
-#springdoc:
-#  api-docs:
-#    path: /api-docs
+#SISPAUTAS
+sispautas:
+  host: http://localhost:8080
