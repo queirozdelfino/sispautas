@@ -9,6 +9,13 @@ import com.cooperativismo.sispautas.exception.message.ErrorMessage;
 public class DateUtil {
 	
 	
+	public static void validaData(LocalDateTime date, String nomeCampo, Class<?> clazz) {
+		if(date == null) {
+			BasicLog.error(ErrorMessage.DADO_VAZIO.erroCampoVazio(nomeCampo), clazz);
+			throw new DomainBadRequestException(ErrorMessage.DADO_VAZIO.erroCampoVazio(nomeCampo));
+		}
+	}
+	
 	public static void validaDataIntervalo(LocalDateTime startDate, LocalDateTime endDate, Class<?> clazz) {
 		if(startDate.isAfter(endDate)) {
 			BasicLog.error(ErrorMessage.DADO_MAIOR.erroCampoMaior(startDate.toString(), endDate.toString()), clazz);

@@ -1,8 +1,18 @@
 package com.cooperativismo.sispautas.utils;
 
 import java.util.InputMismatchException;
+import com.cooperativismo.sispautas.exception.DomainBadRequestException;
+import com.cooperativismo.sispautas.exception.message.ErrorMessage;
 
 public class CPFUtil{
+	
+	public static void validaCPF(String cpf, Class<?> clazz) {
+		StringUtil.validaCampo(cpf, "CPF", 11, clazz);
+		if(!isCPF(cpf)) { 	//Se o cpf for inválido estorará um BadRequest para o cliente.
+			BasicLog.error(ErrorMessage.CPF_INVALIDO.getMessage(), clazz);
+			throw new DomainBadRequestException(ErrorMessage.CPF_INVALIDO.getMessage());
+		}
+	}
 
     public static boolean isCPF(String CPF) {
 
