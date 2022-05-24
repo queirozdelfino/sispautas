@@ -1,6 +1,8 @@
 package com.cooperativismo.sispautas.domain.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,13 +121,28 @@ public class PautaServiceImpl implements PautaService {
 		return null;
 	}
 	
+	@Override
+	public List<Pauta> findPautaParaVotar() {
+		List<Pauta> response = new ArrayList<>();
+		
+		try {
+			BasicLog.info("Acesso ao banco", PautaService.class);
+			response = repository.findByDataLimite(null); //Procura as pautas que não estão abertas, porém dispoíveis para abrir.
+		} catch (Exception e) {
+			BasicLog.error(e.getMessage(), PautaService.class);
+			throw new DomainInternalServerErrorException(ErrorMessage.ERRO_INTERNO.getMessage(), e);
+		}
+		
+		return response;
+	}
+	
 
 	@Override
 	public Pauta findDecisaoPauta(Long id) {
 		Pauta pauta = findPautaByIdVerify(id);
 		
 		//Validações
-		verifyPautaFechada(pauta);
+		verifyPautaEncerrada(pauta);
 		
 		//Persistência, caso precise.
 		if(pauta.getDecisaoFinal() == null) {
@@ -183,14 +200,29 @@ public class PautaServiceImpl implements PautaService {
 		return pauta;
 	}
 	
-	private void verifyPautaAberta(Pauta pauta) {
+	@Override
+	public void verifyPautaNaoAberta(Pauta pauta) {
 		if(pauta.getDataLimite() != null) {  //Verifica se a pauta já foi iniciada.
 			BasicLog.error(ErrorMessage.PAUTA_JA_INICIADA.getMessage(), PautaService.class);
 			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_JA_INICIADA.getMessage());
 		}
 	}
 	
-	private void verifyPautaFechada(Pauta pauta) {
+	@Override
+	public void verifyPautaAberta(Pauta pauta) {
+		if(pauta.getDataLimite() == null) {  //Verifica se a pauta não foi iniciada ainda.
+			BasicLog.error(ErrorMessage.PAUTA_NAO_INICIADA.getMessage(), PautaService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_NAO_INICIADA.getMessage());
+		}
+		
+		if(pauta.getDataLimite().isBefore(LocalDateTime.now())) { //Verifica se a pauta se encerrou.
+			BasicLog.error(ErrorMessage.PAUTA_VENCIDA.getMessage(), PautaService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_VENCIDA.getMessage());
+		}
+	}
+	
+	@Override
+	public void verifyPautaEncerrada(Pauta pauta) {
 		if(pauta.getDataLimite() == null) {  //Verifica se a pauta já foi iniciada.
 			BasicLog.error(ErrorMessage.PAUTA_NAO_INICIADA.getMessage(), PautaService.class);
 			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_NAO_INICIADA.getMessage());
