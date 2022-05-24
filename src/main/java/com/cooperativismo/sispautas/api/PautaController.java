@@ -42,7 +42,7 @@ public class PautaController implements PautaDocs{
 
 	@Override
 	@GetMapping("/{pautaId}")
-	public ResponseEntity<Pauta> getDecisaoPauta(@PathVariable("pautaId") Long pautaId) {
+	public ResponseEntity<Pauta> getDecisaoPauta(@PathVariable(value ="pautaId") Long pautaId) {
 		return ResponseEntity.status(HttpStatus.OK).body(pautaService.findDecisaoPauta(pautaId));
 	}
 
