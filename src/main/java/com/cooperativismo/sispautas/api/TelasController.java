@@ -51,7 +51,7 @@ public class TelasController implements TelaDocs{
 
 	@Override
 	@GetMapping("/nova-sessao/{pautaId}")
-	public ResponseEntity<TelaFormularioDTO> getTelaAbrirSessao(@PathVariable("pautaId") Long pautaId) {
+	public ResponseEntity<TelaFormularioDTO> getTelaAbrirSessao(@PathVariable(value ="pautaId") Long pautaId) {
 		return ResponseEntity.status(HttpStatus.OK).body(telasService.getTelaAbrirSessao(pautaId));
 	}
 
@@ -59,7 +59,7 @@ public class TelasController implements TelaDocs{
 
 	@Override
 	@GetMapping("/votar/{pautaId}")
-	public ResponseEntity<TelaFormularioDTO> getTelaVotarPauta(Long pautaId) {
+	public ResponseEntity<TelaFormularioDTO> getTelaVotarPauta(@PathVariable(value ="pautaId") Long pautaId) {
 		return ResponseEntity.status(HttpStatus.OK).body(telasService.getTelaVotarPauta(pautaId));
 	}
 
@@ -67,7 +67,7 @@ public class TelasController implements TelaDocs{
 
 	@Override
 	@GetMapping("/resultado/{pautaId}")
-	public ResponseEntity<TelaFormularioDTO> getTelaApresentarResultadoPauta(Long pautaId) {
+	public ResponseEntity<TelaFormularioDTO> getTelaApresentarResultadoPauta(@PathVariable(value ="pautaId") Long pautaId) {
 		return ResponseEntity.status(HttpStatus.OK).body(telasService.getTelaApresentarResultadoPauta(pautaId));
 	}
 	
