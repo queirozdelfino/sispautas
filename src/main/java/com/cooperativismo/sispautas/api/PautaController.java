@@ -28,7 +28,7 @@ public class PautaController implements PautaDocs{
 
 	@Override
 	@PostMapping
-	public ResponseEntity<Pauta> postPauta( PautaDTO pautaDto) {
+	public ResponseEntity<Pauta> postPauta(PautaDTO pautaDto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(pautaService.createPauta(pautaDto));
 	}
 
