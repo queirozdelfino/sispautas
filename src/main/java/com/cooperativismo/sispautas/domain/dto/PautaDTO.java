@@ -12,15 +12,16 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PautaDTO {
 	
-	@Schema(example = "99087586086")
-	private String cpfAutor;
-	
 	@Schema(example = "0")	
 	private Long id;
+	
+	@Schema(example = "99087586086")
+	private String cpfAutor;	
 	
 	@Schema(example = "Comprar outra cooperativa menor?")
 	private String titulo;
 	
 	@Schema(example = "Vendo que o orçamento está bom poderemos comprar outra cooperativa e aumentar nossa produção.")
 	private String detalhes;
+	
 }

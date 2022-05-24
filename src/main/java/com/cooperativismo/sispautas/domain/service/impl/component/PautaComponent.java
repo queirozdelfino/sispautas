@@ -2,13 +2,12 @@ package com.cooperativismo.sispautas.domain.service.impl.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.cooperativismo.sispautas.domain.entity.Associado;
 import com.cooperativismo.sispautas.domain.entity.Pauta;
 import com.cooperativismo.sispautas.domain.enums.Decisao;
 import com.cooperativismo.sispautas.domain.service.AssociadoService;
-import com.cooperativismo.sispautas.domain.service.impl.validators.AssociadoValidators;
 import com.cooperativismo.sispautas.utils.BasicLog;
+import com.cooperativismo.sispautas.utils.CPFUtil;
 
 /**
  * Classe component para auxiliar a service e separar métodos. 
@@ -28,7 +27,7 @@ public class PautaComponent {
 
 	public Associado findAssociadoByCpf(String cpf) {
 		BasicLog.info("Validando CPF", PautaComponent.class);
-		AssociadoValidators.validaCPF(cpf);
+		CPFUtil.validaCPF(cpf, PautaComponent.class);
 		return associadoService.findAssociadoByCpf(cpf);
 	}
 	
