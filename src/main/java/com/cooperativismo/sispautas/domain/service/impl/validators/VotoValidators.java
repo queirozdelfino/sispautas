@@ -1,6 +1,10 @@
 package com.cooperativismo.sispautas.domain.service.impl.validators;
 
 import com.cooperativismo.sispautas.domain.dto.VotoDTO;
+import com.cooperativismo.sispautas.domain.entity.Associado;
+import com.cooperativismo.sispautas.domain.service.PautaService;
+import com.cooperativismo.sispautas.exception.DomainNotFoundException;
+import com.cooperativismo.sispautas.exception.message.ErrorMessage;
 import com.cooperativismo.sispautas.utils.BasicLog;
 import com.cooperativismo.sispautas.utils.CPFUtil;
 import com.cooperativismo.sispautas.utils.NumberUtil;
@@ -19,6 +23,14 @@ public class VotoValidators {
 		StringUtil.validaCampoDecisao(votoDto.getDecisao(), VotoValidators.class);
 	}
 	
+	public static void findAssociadoByCpfVerify(Associado autor) {
+		
+		if(autor == null) {  //Verifica se o cpf foi encontrado
+			BasicLog.error(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage(), PautaService.class);
+			throw new DomainNotFoundException(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage());
+		}
+		
+	}
 	
 
 }
