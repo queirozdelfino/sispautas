@@ -16,6 +16,7 @@ import com.cooperativismo.sispautas.exception.DomainInternalServerErrorException
 import com.cooperativismo.sispautas.exception.DomainNotFoundException;
 import com.cooperativismo.sispautas.exception.DomainUnprocessableEntityException;
 import com.cooperativismo.sispautas.exception.message.ErrorMessage;
+import com.cooperativismo.sispautas.external.CpfExternalService;
 import com.cooperativismo.sispautas.utils.BasicLog;
 
 @Service
@@ -23,14 +24,15 @@ public class VotoServiceImpl implements VotoService {
 	
 	private final VotoRepository repository;
 	private final VotoComponent votoComponent;
-	
+	private final CpfExternalService cpfExternalService;
 	
 	@Autowired
-	public VotoServiceImpl(VotoRepository repository, VotoComponent votoComponent) {
+	public VotoServiceImpl(VotoRepository repository, VotoComponent votoComponent,
+			CpfExternalService cpfExternalService) {
 		this.repository = repository;
 		this.votoComponent = votoComponent;
+		this.cpfExternalService = cpfExternalService;
 	}
-
 
 	@Override
 	public Voto createVoto(VotoDTO votoDto) {
@@ -40,6 +42,7 @@ public class VotoServiceImpl implements VotoService {
 		
 		//Validações
 		VotoValidators.validators(votoDto);
+		cpfExternalService.getPermissionCpfToVote(votoDto.getCpfAssociado());
 		autor = votoComponent.findAssociadoByCpf(votoDto.getCpfAssociado());
 		pauta = findPautaByIdVerify(votoDto.getIdPauta());
 		PautaValidators.validatorsPautaVencida(pauta.getDataLimite());
