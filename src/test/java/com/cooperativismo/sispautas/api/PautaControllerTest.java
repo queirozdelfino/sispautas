@@ -25,7 +25,6 @@ import com.cooperativismo.sispautas.domain.entity.Pauta;
 import com.cooperativismo.sispautas.domain.enums.Decisao;
 import com.cooperativismo.sispautas.domain.service.PautaService;
 import com.cooperativismo.sispautas.exception.DomainBadRequestException;
-import com.cooperativismo.sispautas.exception.DomainUnprocessableEntityException;
 import com.cooperativismo.sispautas.exception.message.ErrorMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -81,7 +80,7 @@ class PautaControllerTest {
 	@DisplayName("createSessaoPauta200")
 	void createSessaoPauta200() throws Exception {
 		final Associado associado = new Associado(1L,"99087586086", "João dos Reis");
-		final PautaDTO dto = new PautaDTO(1L, "99087586086", "Teste", "Detalhe");
+		final SessaoPautaDTO dto = new SessaoPautaDTO(1L, "99087586086", null);
 		
 		given(pautaService.createSessao(any(SessaoPautaDTO.class)))
 			.willReturn(new Pauta(1L,"Teste", "Detalhe", associado, LocalDateTime.now(), new ArrayList<>(), null));
@@ -90,25 +89,9 @@ class PautaControllerTest {
 		 this.mockMvc.perform(post("/pauta")
 	                .contentType(MediaType.APPLICATION_JSON)
 	                .content(objectMapper.writeValueAsString(dto)))
-	                .andExpect(status().isCreated())
-	                .andExpect(jsonPath("$.autor.cpf", is(dto.getCpfAutor())));
+	                .andExpect(status().isCreated());
 	}
 	
-	@Test
-	@DisplayName("createSessaoPauta422")
-	void createSessaoPauta422() throws Exception {
-		final PautaDTO dto = new PautaDTO(1L, "99087586086", "Teste", "Detalhe");
-		
-		given(pautaService.createSessao(any(SessaoPautaDTO.class)))
-			.willThrow(new DomainUnprocessableEntityException(ErrorMessage.PAUTA_ABERTA.getMessage()));
-		
-		
-		 this.mockMvc.perform(post("/pauta")
-	                .contentType(MediaType.APPLICATION_JSON)
-	                .content(objectMapper.writeValueAsString(dto)))
-		 			.andExpect(status().isBadRequest())
-		 			.andExpect(jsonPath("$.errors[0].detail", is(ErrorMessage.PAUTA_ABERTA.getMessage())));
-	}
 	
     @Test
     @DisplayName("findSessaoPauta200")
