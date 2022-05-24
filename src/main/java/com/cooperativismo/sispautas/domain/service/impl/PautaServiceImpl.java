@@ -86,7 +86,7 @@ public class PautaServiceImpl implements PautaService {
 		//Validações
 		PautaValidators.validatorsSessao(sessaoPautaDTO);
 		response = findPautaByIdVerify(sessaoPautaDTO.getIdPauta());
-		verifyPautaAberta(response);
+		verifyPautaNaoAberta(response);
 		autor = findAssociadoByCpfVerify(sessaoPautaDTO.getCpfAutor());
 		
 		//Persistência
