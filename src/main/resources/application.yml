@@ -18,3 +18,8 @@ spring:
 #SISPAUTAS
 sispautas:
   host: http://localhost:8080
+  
+#EXTERNAL
+external:
+  sistema-cpf:
+    host: https://user-info.herokuapp.com/users/
