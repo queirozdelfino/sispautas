@@ -42,11 +42,12 @@ public class VotoServiceImpl implements VotoService {
 		
 		//Validações
 		VotoValidators.validators(votoDto);
-		cpfExternalService.getPermissionCpfToVote(votoDto.getCpfAssociado());
 		autor = votoComponent.findAssociadoByCpf(votoDto.getCpfAssociado());
+		VotoValidators.findAssociadoByCpfVerify(autor);
 		pauta = findPautaByIdVerify(votoDto.getIdPauta());
 		PautaValidators.validatorsPautaVencida(pauta.getDataLimite());
 		verifyExistsVoto(autor, pauta);
+		cpfExternalService.getPermissionCpfToVote(votoDto.getCpfAssociado());
 		
 		
 		//Persistência
