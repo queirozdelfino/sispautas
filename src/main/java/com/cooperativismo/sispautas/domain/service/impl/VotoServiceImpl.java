@@ -11,6 +11,7 @@ import com.cooperativismo.sispautas.domain.repository.VotoRepository;
 import com.cooperativismo.sispautas.domain.service.VotoService;
 import com.cooperativismo.sispautas.domain.service.impl.component.VotoComponent;
 import com.cooperativismo.sispautas.domain.service.impl.validators.PautaValidators;
+import com.cooperativismo.sispautas.domain.service.impl.validators.VotoValidators;
 import com.cooperativismo.sispautas.exception.DomainInternalServerErrorException;
 import com.cooperativismo.sispautas.exception.DomainNotFoundException;
 import com.cooperativismo.sispautas.exception.DomainUnprocessableEntityException;
@@ -38,6 +39,7 @@ public class VotoServiceImpl implements VotoService {
 		Pauta pauta;
 		
 		//Validações
+		VotoValidators.validators(votoDto);
 		autor = votoComponent.findAssociadoByCpf(votoDto.getCpfAssociado());
 		pauta = findPautaByIdVerify(votoDto.getIdPauta());
 		PautaValidators.validatorsPautaVencida(pauta.getDataLimite());

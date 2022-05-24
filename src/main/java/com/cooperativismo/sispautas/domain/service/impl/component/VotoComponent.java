@@ -6,8 +6,8 @@ import com.cooperativismo.sispautas.domain.entity.Associado;
 import com.cooperativismo.sispautas.domain.entity.Pauta;
 import com.cooperativismo.sispautas.domain.service.AssociadoService;
 import com.cooperativismo.sispautas.domain.service.PautaService;
-import com.cooperativismo.sispautas.domain.service.impl.validators.AssociadoValidators;
 import com.cooperativismo.sispautas.utils.BasicLog;
+import com.cooperativismo.sispautas.utils.CPFUtil;
 
 @Component
 public class VotoComponent {
@@ -24,7 +24,7 @@ public class VotoComponent {
 
 	public Associado findAssociadoByCpf(String cpf) {
 		BasicLog.info("Validando CPF", PautaComponent.class);
-		AssociadoValidators.validaCPF(cpf);
+		CPFUtil.validaCPF(cpf, PautaComponent.class);
 		return associadoService.findAssociadoByCpf(cpf);
 	}
 	

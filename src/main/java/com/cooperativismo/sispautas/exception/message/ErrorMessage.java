@@ -19,7 +19,8 @@ public enum ErrorMessage {
 	PAUTA_VENCIDA("O período de votação dessa pauta já se encerrou."),
 	CADASTO_DUPLICADO("Cadastro duplicado."),
 	DADO_VAZIO(" não pode ser vazio."),
-	DADO_MAIOR(" não pode ser maior que ");
+	DADO_MAIOR(" não pode ser maior que "),
+	VALIDATION_ERROR("VALIDATION ERROR");
 
 	private final String message;
 

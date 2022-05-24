@@ -1,46 +1,92 @@
 package com.cooperativismo.sispautas.api;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
-import java.io.IOException;
-import org.json.JSONException;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 import com.cooperativismo.sispautas.domain.dto.AssociadoDTO;
+import com.cooperativismo.sispautas.domain.entity.Associado;
+import com.cooperativismo.sispautas.domain.service.AssociadoService;
+import com.cooperativismo.sispautas.exception.DomainBadRequestException;
+import com.cooperativismo.sispautas.exception.DomainUnprocessableEntityException;
+import com.cooperativismo.sispautas.exception.message.ErrorMessage;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest(properties = "app.baseUrl=https://localhost:8091", webEnvironment = WebEnvironment.DEFINED_PORT)
+
+@WebMvcTest(controllers = AssociadoController.class)
+@ActiveProfiles("test")
 @DisplayName("Tests of AssociadoController")
 class AssociadoControllerTest {
 	
 	@Autowired
-	private TestRestTemplate testClient; 
+	MockMvc mockMvc;
+	
+	@MockBean
+	AssociadoService service;
+	
+	@Autowired
+    private ObjectMapper objectMapper;
 	
 	@Test
-	@DisplayName("postAssociado201")
-	void getAssociado201() throws JSONException, IOException {
-		AssociadoDTO associadoDto = new AssociadoDTO();
+	@DisplayName("createAssociados201")
+	void createAssociados201() throws Exception {
 		
-		associadoDto.setCpf("");
-		associadoDto.setNome("João dos Reis");
+		given(service.createAssociado(any(AssociadoDTO.class))).willReturn(new Associado(1L, "99087586086", "João dos Reis"));
 		
-		final ResponseEntity<String> response = this.testClient.exchange(
-				"/associado",
-				HttpMethod.POST,
-				new HttpEntity<>(associadoDto),
-				String.class);
+		AssociadoDTO associadoDTO = new AssociadoDTO("99087586086", "João dos Reis");
 		
-		assertThat(response.getStatusCode(),
-				is((HttpStatus.UNPROCESSABLE_ENTITY)));
+		 this.mockMvc.perform(post("/associado")
+	                .contentType(MediaType.APPLICATION_JSON)
+	                .content(objectMapper.writeValueAsString(associadoDTO)))
+	                .andExpect(status().isCreated())
+	                .andExpect(jsonPath("$.cpf", is(associadoDTO.getCpf())))
+	                .andExpect(jsonPath("$.nome", is(associadoDTO.getNome())));
 	}
-
+	
+	
+	@Test
+	@DisplayName("createAssociados400")
+	void createAssociados400() throws Exception {
+		
+		given(service.createAssociado(any(AssociadoDTO.class))).willThrow(new DomainBadRequestException(ErrorMessage.VALIDATION_ERROR.getMessage()));
+		
+		AssociadoDTO associadoDTO = new AssociadoDTO(null, null);
+		
+		 this.mockMvc.perform(post("/associado")
+	                .contentType(MediaType.APPLICATION_JSON)
+	                .content(objectMapper.writeValueAsString(associadoDTO)))
+	                .andExpect(status().isBadRequest())
+		 			.andExpect(jsonPath("$.errors[0].detail", is(ErrorMessage.VALIDATION_ERROR.getMessage())));
+	}
+	
+	@Test
+	@DisplayName("createAssociados422")
+	void createAssociados422() throws Exception {
+		
+		given(service.createAssociado(any(AssociadoDTO.class))).willThrow(new DomainUnprocessableEntityException(ErrorMessage.CADASTO_DUPLICADO.getMessage()));
+		
+		AssociadoDTO associadoDTO = new AssociadoDTO("99087586086", "João dos Reis");
+		
+		 this.mockMvc.perform(post("/associado")
+	                .contentType(MediaType.APPLICATION_JSON)
+	                .content(objectMapper.writeValueAsString(associadoDTO)))
+	                .andExpect(status().isUnprocessableEntity())
+		 			.andExpect(jsonPath("$.errors[0].detail", is(ErrorMessage.CADASTO_DUPLICADO.getMessage())));
+	}
+	
+	
+	
 }
