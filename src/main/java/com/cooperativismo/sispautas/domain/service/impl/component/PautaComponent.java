@@ -9,9 +9,6 @@ import com.cooperativismo.sispautas.domain.service.AssociadoService;
 import com.cooperativismo.sispautas.utils.BasicLog;
 import com.cooperativismo.sispautas.utils.CPFUtil;
 
-/**
- * Classe component para auxiliar a service e separar métodos. 
- */
 @Component
 public class PautaComponent {
 	
@@ -26,10 +23,13 @@ public class PautaComponent {
 
 
 	public Associado findAssociadoByCpf(String cpf) {
+		
 		BasicLog.info("Validando CPF", PautaComponent.class);
 		CPFUtil.validaCPF(cpf, PautaComponent.class);
+		
 		return associadoService.findAssociadoByCpf(cpf);
 	}
+	
 	
 	public Pauta calcDecisao(Pauta pauta) {
 		
@@ -44,7 +44,7 @@ public class PautaComponent {
 		if(this.countSim > this.countNao) {
 			pauta.setDecisaoFinal(Decisao.SIM);
 		} else {
-			pauta.setDecisaoFinal(Decisao.NAO);  //Para casos de empate, o não será default.
+			pauta.setDecisaoFinal(Decisao.NAO);
 		}
 		
 		return pauta;

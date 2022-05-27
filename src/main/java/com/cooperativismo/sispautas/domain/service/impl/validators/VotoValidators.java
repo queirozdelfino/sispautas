@@ -21,11 +21,12 @@ public class VotoValidators {
 		NumberUtil.validaCampoLong(votoDto.getIdPauta(), "idPauta", VotoValidators.class);
 		CPFUtil.validaCPF(votoDto.getCpfAssociado(), VotoValidators.class);
 		StringUtil.validaCampoDecisao(votoDto.getDecisao(), VotoValidators.class);
+		
 	}
 	
 	public static void findAssociadoByCpfVerify(Associado autor) {
 		
-		if(autor == null) {  //Verifica se o cpf foi encontrado
+		if(autor == null) {
 			BasicLog.error(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage(), PautaService.class);
 			throw new DomainNotFoundException(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage());
 		}

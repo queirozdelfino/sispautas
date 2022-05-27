@@ -23,10 +23,14 @@ public class VotoComponent {
 
 
 	public Associado findAssociadoByCpf(String cpf) {
+		
 		BasicLog.info("Validando CPF", PautaComponent.class);
 		CPFUtil.validaCPF(cpf, PautaComponent.class);
+		
 		return associadoService.findAssociadoByCpf(cpf);
+		
 	}
+	
 	
 	public Pauta findPautaById(Long id) {
 		return pautaService.findPautaById(id);
