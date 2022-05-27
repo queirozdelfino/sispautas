@@ -21,7 +21,6 @@ public class AssociadoServiceImpl implements AssociadoService{
 	private final AssociadoRepository repository;
 	
 	
-	
 	@Autowired
 	public AssociadoServiceImpl(AssociadoRepository repository) {
 		this.repository = repository;
@@ -46,7 +45,9 @@ public class AssociadoServiceImpl implements AssociadoService{
 		}
 		
 		return response;
+		
 	}
+	
 	
 	@Override
 	public Associado findAssociadoByCpf(String cpf) {
@@ -64,6 +65,7 @@ public class AssociadoServiceImpl implements AssociadoService{
 		}
 		
 		return null;
+		
 	}
 	
 	
@@ -74,13 +76,16 @@ public class AssociadoServiceImpl implements AssociadoService{
 		associado.setNome(dto.getNome());
 		
 		return associado;
+		
 	}
 	
+	
 	private void verifyCpfDuplicado(AssociadoDTO associadoDto) {
-		if(findAssociadoByCpf(associadoDto.getCpf()) != null) {  //Verifica se o cadastro não está duplicado por CPF.
+		if(findAssociadoByCpf(associadoDto.getCpf()) != null) {
 			BasicLog.error(ErrorMessage.CADASTO_DUPLICADO.getMessage(), AssociadoService.class);
 			throw new DomainUnprocessableEntityException(ErrorMessage.CADASTO_DUPLICADO.getMessage());
 		}
 	}
 
+	
 }

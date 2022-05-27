@@ -16,7 +16,7 @@ public interface PautaService {
 	
 	Pauta findDecisaoPauta(Long id);
 
-	Pauta createPauta(Pauta pauta);
+	Pauta updatePauta(Pauta pauta);
 
 	List<Pauta> findPautaParaVotar();
 	

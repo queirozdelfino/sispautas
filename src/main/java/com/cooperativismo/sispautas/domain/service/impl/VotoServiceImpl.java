@@ -49,7 +49,6 @@ public class VotoServiceImpl implements VotoService {
 		verifyExistsVoto(autor, pauta);
 		cpfExternalService.getPermissionCpfToVote(votoDto.getCpfAssociado());
 		
-		
 		//Persistência
 		try {
 			BasicLog.info("Acesso ao banco", VotoService.class);
@@ -61,27 +60,7 @@ public class VotoServiceImpl implements VotoService {
 		
 		return response;
 	}
-	
-	private Pauta findPautaByIdVerify(Long idPauta) {
-		Pauta pauta = votoComponent.findPautaById(idPauta);
-		
-		if(pauta == null) {  //Verifica se a pauta existe.
-			BasicLog.error(ErrorMessage.PAUTA_NAO_ENCONTRADA.getMessage(), VotoService.class);
-			throw new DomainNotFoundException(ErrorMessage.PAUTA_NAO_ENCONTRADA.getMessage());
-		}
-		
-		
-		return pauta;
-	}
-	
-	private void verifyExistsVoto(Associado autor, Pauta pauta) {
-		Voto voto = findVotoByAssociadoAndPauta(autor, pauta);
-		
-		if(voto != null) {  //Verifica se a pauta já foi votada pelo associado.
-			BasicLog.error(ErrorMessage.VOTO_EXISTENTE.getMessage(), VotoService.class);
-			throw new DomainUnprocessableEntityException(ErrorMessage.VOTO_EXISTENTE.getMessage());
-		}
-	}
+
 	
 	@Override
 	public Voto findVotoByAssociadoAndPauta(Associado autor, Pauta pauta) {
@@ -111,6 +90,28 @@ public class VotoServiceImpl implements VotoService {
 		voto.setDecisao(votoDto.getDecisao());
 		
 		return voto;
+	}
+	
+	private void verifyExistsVoto(Associado autor, Pauta pauta) {
+		Voto voto = findVotoByAssociadoAndPauta(autor, pauta);
+		
+		if(voto != null) {
+			BasicLog.error(ErrorMessage.VOTO_EXISTENTE.getMessage(), VotoService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.VOTO_EXISTENTE.getMessage());
+		}
+		
+	}
+	
+	
+	private Pauta findPautaByIdVerify(Long idPauta) {
+		Pauta pauta = votoComponent.findPautaById(idPauta);
+		
+		if(pauta == null) { 
+			BasicLog.error(ErrorMessage.PAUTA_NAO_ENCONTRADA.getMessage(), VotoService.class);
+			throw new DomainNotFoundException(ErrorMessage.PAUTA_NAO_ENCONTRADA.getMessage());
+		}
+		
+		return pauta;
 	}
 
 }
