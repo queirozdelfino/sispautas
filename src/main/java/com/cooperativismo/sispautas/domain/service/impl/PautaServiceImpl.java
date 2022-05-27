@@ -22,9 +22,6 @@ import com.cooperativismo.sispautas.exception.DomainUnprocessableEntityException
 import com.cooperativismo.sispautas.exception.message.ErrorMessage;
 import com.cooperativismo.sispautas.utils.BasicLog;
 
-/***
- * Classe responsável pelos serviços de Pauta.
- */
 @Service
 public class PautaServiceImpl implements PautaService {
 	
@@ -59,10 +56,12 @@ public class PautaServiceImpl implements PautaService {
 		}
 		
 		return response;
+		
 	}
 	
+	
 	@Override
-	public Pauta createPauta(Pauta pauta) {
+	public Pauta updatePauta(Pauta pauta) {
 		Pauta response;
 		
 		//Persistência
@@ -75,6 +74,7 @@ public class PautaServiceImpl implements PautaService {
 		}
 		
 		return response;
+		
 	}
 	
 	
@@ -121,13 +121,14 @@ public class PautaServiceImpl implements PautaService {
 		return null;
 	}
 	
+	
 	@Override
 	public List<Pauta> findPautaParaVotar() {
 		List<Pauta> response = new ArrayList<>();
 		
 		try {
 			BasicLog.info("Acesso ao banco", PautaService.class);
-			response = repository.findByDataLimite(null); //Procura as pautas que não estão abertas, porém dispoíveis para abrir.
+			response = repository.findByDataLimite(null);
 		} catch (Exception e) {
 			BasicLog.error(e.getMessage(), PautaService.class);
 			throw new DomainInternalServerErrorException(ErrorMessage.ERRO_INTERNO.getMessage(), e);
@@ -147,14 +148,51 @@ public class PautaServiceImpl implements PautaService {
 		//Persistência, caso precise.
 		if(pauta.getDecisaoFinal() == null) {
 			pauta = pautaComponent.calcDecisao(pauta);
-			pauta = createPauta(pauta);
+			pauta = updatePauta(pauta);
 		}
 		
 		return pauta;
+		
 	}
 	
 	
+	@Override
+	public void verifyPautaNaoAberta(Pauta pauta) {
+		if(pauta.getDataLimite() != null) {
+			BasicLog.error(ErrorMessage.PAUTA_JA_INICIADA.getMessage(), PautaService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_JA_INICIADA.getMessage());
+		}
+	}
+	
+	
+	@Override
+	public void verifyPautaAberta(Pauta pauta) {
+		if(pauta.getDataLimite() == null) {
+			BasicLog.error(ErrorMessage.PAUTA_NAO_INICIADA.getMessage(), PautaService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_NAO_INICIADA.getMessage());
+		}
+		
+		if(pauta.getDataLimite().isBefore(LocalDateTime.now())) {
+			BasicLog.error(ErrorMessage.PAUTA_VENCIDA.getMessage(), PautaService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_VENCIDA.getMessage());
+		}
+	}
+	
+	
+	@Override
+	public void verifyPautaEncerrada(Pauta pauta) {
+		if(pauta.getDataLimite() == null) {
+			BasicLog.error(ErrorMessage.PAUTA_NAO_INICIADA.getMessage(), PautaService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_NAO_INICIADA.getMessage());
+		}
+		
+		if(pauta.getDataLimite().isAfter(LocalDateTime.now())) {
+			BasicLog.error(ErrorMessage.PAUTA_ABERTA.getMessage(), PautaService.class);
+			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_ABERTA.getMessage());
+		}
+	}
 
+	
 	private Pauta mapPauta(PautaDTO dto, Associado autor) {
 		Pauta pauta = new Pauta();
 		
@@ -162,76 +200,47 @@ public class PautaServiceImpl implements PautaService {
 		pauta.setDetalhes(dto.getDetalhes());
 		pauta.setAutor(autor);
 		return pauta;
+		
 	}
+	
 	
 	private Pauta mapPautaBySessao(SessaoPautaDTO dto, Associado autor, Pauta pauta) {
 	
 		pauta.setAutor(autor);
 		
-		if(dto.getDataLimite() == null) { //Se data limite não for colocado o default será setado.
+		if(dto.getDataLimite() == null) {
 			pauta.setDataLimite(LocalDateTime.now().plusMinutes(DEFAULT_MINUTE_SESSAO));
 		} else {			
 			pauta.setDataLimite(dto.getDataLimite());
 		}
 		
 		return pauta;
+		
 	}
+	
 	
 	private Associado findAssociadoByCpfVerify(String cpf) {
 		Associado autor = pautaComponent.findAssociadoByCpf(cpf);
 		
-		if(autor == null) {  //Verifica se o cpf foi encontrado
+		if(autor == null) {
 			BasicLog.error(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage(), PautaService.class);
 			throw new DomainNotFoundException(ErrorMessage.CPF_NAO_ENCONTRADO.getMessage());
 		}
 		
 		return autor;
+		
 	}
 
 
 	private Pauta findPautaByIdVerify(Long id) {
 		Pauta pauta = findPautaById(id);
 		
-		if(pauta == null) {  //Verifica se a pauta existe.
+		if(pauta == null) {
 			BasicLog.error(ErrorMessage.PAUTA_NAO_ENCONTRADA.getMessage(), PautaService.class);
 			throw new DomainNotFoundException(ErrorMessage.PAUTA_NAO_ENCONTRADA.getMessage());
 		}
 		
 		return pauta;
-	}
-	
-	@Override
-	public void verifyPautaNaoAberta(Pauta pauta) {
-		if(pauta.getDataLimite() != null) {  //Verifica se a pauta já foi iniciada.
-			BasicLog.error(ErrorMessage.PAUTA_JA_INICIADA.getMessage(), PautaService.class);
-			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_JA_INICIADA.getMessage());
-		}
-	}
-	
-	@Override
-	public void verifyPautaAberta(Pauta pauta) {
-		if(pauta.getDataLimite() == null) {  //Verifica se a pauta não foi iniciada ainda.
-			BasicLog.error(ErrorMessage.PAUTA_NAO_INICIADA.getMessage(), PautaService.class);
-			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_NAO_INICIADA.getMessage());
-		}
 		
-		if(pauta.getDataLimite().isBefore(LocalDateTime.now())) { //Verifica se a pauta se encerrou.
-			BasicLog.error(ErrorMessage.PAUTA_VENCIDA.getMessage(), PautaService.class);
-			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_VENCIDA.getMessage());
-		}
 	}
-	
-	@Override
-	public void verifyPautaEncerrada(Pauta pauta) {
-		if(pauta.getDataLimite() == null) {  //Verifica se a pauta já foi iniciada.
-			BasicLog.error(ErrorMessage.PAUTA_NAO_INICIADA.getMessage(), PautaService.class);
-			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_NAO_INICIADA.getMessage());
-		}
-		
-		if(pauta.getDataLimite().isAfter(LocalDateTime.now())) { //Verifica se a pauta foi fechada para gerar o resultado.
-			BasicLog.error(ErrorMessage.PAUTA_ABERTA.getMessage(), PautaService.class);
-			throw new DomainUnprocessableEntityException(ErrorMessage.PAUTA_ABERTA.getMessage());
-		}
-	}
-
 }

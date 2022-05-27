@@ -1,5 +1,6 @@
 package com.cooperativismo.sispautas.domain.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,9 +17,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- *Entidade responsável por manter votos nas sessões
- */
 
 @Getter
 @NoArgsConstructor
@@ -38,7 +36,7 @@ public class Voto {
 	private Decisao decisao;
 	
 	@Setter
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Associado autor;
 	
 	@Setter

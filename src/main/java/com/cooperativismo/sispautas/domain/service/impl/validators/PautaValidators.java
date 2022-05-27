@@ -19,6 +19,7 @@ public class PautaValidators {
 		CPFUtil.validaCPF(pautaDto.getCpfAutor(), PautaValidators.class);
 		StringUtil.validaCampo(pautaDto.getTitulo(), "Título", 40, PautaValidators.class);
 		StringUtil.validaCampo(pautaDto.getDetalhes(), "Detalhes", 300, PautaValidators.class);
+		
 	}
 	
 	public static void validatorsSessao(SessaoPautaDTO sessaoPautaDTO) {
@@ -28,6 +29,7 @@ public class PautaValidators {
 		if(sessaoPautaDTO.getDataLimite() != null) {
 			DateUtil.validaDataIntervalo(LocalDateTime.now(), sessaoPautaDTO.getDataLimite(), PautaValidators.class);
 		}
+		
 	}
 	
 	public static void validatorsPautaVencida(LocalDateTime data) {
@@ -35,6 +37,7 @@ public class PautaValidators {
 		if(data != null) {		
 			DateUtil.validaDataVencida(LocalDateTime.now(), data, PautaValidators.class);
 		}
+		
 	}
 
 	

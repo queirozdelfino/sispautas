@@ -6,11 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-/**
- *DTO responsável por manter Associado na cooperativa.
- */
-
 @Getter
 @Setter
 @NoArgsConstructor

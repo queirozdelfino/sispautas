@@ -15,6 +15,7 @@ public class TelasComponent {
 	private final PautaService pautaService;
 	private final Environment env;
 	
+	
 	@Autowired
 	public TelasComponent(PautaService pautaService, Environment env) {
 		this.pautaService = pautaService;
@@ -34,6 +35,7 @@ public class TelasComponent {
 		});
 		
 		return response;
+		
 	}
 
 	public Pauta findPautaNaoAbertaById(Long id){
@@ -42,6 +44,7 @@ public class TelasComponent {
 		pautaService.verifyPautaNaoAberta(pauta);
 		
 		return pauta;
+		
 	}
 	
 	public Pauta findPautaNaoFechadaById(Long id){
@@ -50,6 +53,7 @@ public class TelasComponent {
 		pautaService.verifyPautaAberta(pauta);
 		
 		return pauta;
+		
 	}
 	
 	public Pauta findPautaFechadaById(Long id){
@@ -58,5 +62,6 @@ public class TelasComponent {
 		pautaService.verifyPautaEncerrada(pauta);
 		
 		return pauta;
+		
 	}
 }
